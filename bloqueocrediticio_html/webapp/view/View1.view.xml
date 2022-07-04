@@ -1,0 +1,179 @@
+<mvc:View 
+        controllerName="SCO.BTP.bloqueocrediticio_html.controller.View1" 
+        xmlns:mvc="sap.ui.core.mvc" 
+        xmlns:core="sap.ui.core"
+        xmlns:u="sap.uxap"
+        xmlns:l="sap.ui.layout"
+        xmlns:f="sap.ui.layout.form"
+        displayBlock="true" 
+        xmlns="sap.m">
+	<Shell id="shell">
+		<App id="app">
+			<pages>
+                <Page showHeader="false">
+                    <subHeader>
+                        <Toolbar id="filters">
+                            <Label class="sapUiSmallMarginBegin" text="Cliente:"/>
+                            <Input
+                                    showValueHelp="true"
+                                    valueHelpRequest="handleSelectCliente"
+                                    value="{
+                                        path:'/filters/Cliente',
+                                        type : 'sap.ui.model.type.String',
+                                        constraints:{minLength:1}
+                                    }"
+                                    valueLiveUpdate="true"
+                                    submit="handleSearch"
+                                    width="12rem"
+                            />
+                            <Label class="sapUiSmallMarginBegin" text="Area Control Credito"/>
+                            <Select items="{/AreasControlCredito}"
+                                    selectedKey="{
+                                        path:'/filters/ACC',
+                                        type : 'sap.ui.model.type.String',
+                                        constraints:{minLength:1}
+                                    }" width="12rem">
+                                <core:Item key="{KKBER}" text="{KKBER} - {KKBTX}"/>
+                            </Select>
+                            <ToolbarSpacer/>
+                            <Button icon="sap-icon://search" text="Buscar" press="handleSearch"/>
+                        </Toolbar>
+                    </subHeader>
+                    <u:ObjectPageLayout id="ObjectPageLayout" visible="{/VisibleResultado}" subSectionLayout="TitleOnTop"
+                                        useIconTabBar="true">
+                        <u:headerTitle>
+                            <u:ObjectPageHeader id="headerForTest"
+                                                headerDesign="Light"
+                                                objectTitle="{/DatosCliente/T_KNA1/NAME1} {/DatosCliente/T_KNA1/NAME2}"
+                                                objectImageShape="Circle">
+                            </u:ObjectPageHeader>
+                        </u:headerTitle>
+                        <u:headerContent>
+                            <ObjectStatus title="Dirección" text="{/DatosCliente/T_KNA1/STRAS}"/>
+                            <ObjectStatus title="Teléfonos"
+                                        text="{/DatosCliente/T_KNA1/TELF1} {/DatosCliente/T_KNA1/TELF2} {/DatosCliente/TEL_MOVIL}"/>
+                            <ObjectStatus title="Email" text="{/DatosCliente/EMAIL}"/>
+                            <ObjectStatus title="Grupo" text="{/DatosCliente/T_KNA1/KONZS}"
+                                        visible="{=${/DatosCliente/T_KNA1/KONZS} !== ''}"/>
+                        </u:headerContent>
+                        <u:sections>
+                            <u:ObjectPageSection title="Antecedentes Crediticios">
+                                <u:subSections>
+                                    <u:ObjectPageSubSection title="">
+                                        <u:blocks>
+                                            <l:Grid defaultSpan="XL12 L6 M8 S12">
+                                                <Panel headerText="Límite de Crédito">
+                                                    <l:Grid defaultSpan="XL6 L6 M6 S12">
+                                                        <f:SimpleForm
+                                                                layout="ResponsiveGridLayout" labelSpanXL="3"
+                                                                labelSpanL="4" labelSpanM="4"
+                                                                labelSpanS="4" adjustLabelSpan="false"
+                                                                emptySpanXL="0" emptySpanL="0"
+                                                                emptySpanM="0" emptySpanS="0">
+                                                            <f:content class="">
+                                                                <Label text="Límite de Crédito"/>
+                                                                <Text text="{path:'/AntecedentesFinancieros/ControlCreditos/E_CREDITLIMIT',formatter: '.multiplicarMontoFormatter'}"/>
+                                                                <Label text="Cuenta Crédito"/>
+                                                                <Text text="{/AntecedentesFinancieros/ControlCreditos/E_KNKLI}"/>
+                                                                <Label text="Grado de agot. (%)"/>
+                                                                <Text text="{/AntecedentesFinancieros/ControlCreditos/E_PERCENTAGE}"/>
+                                                            </f:content>
+                                                        </f:SimpleForm>
+                                                        <f:SimpleForm
+                                                                layout="ResponsiveGridLayout" labelSpanXL="3"
+                                                                labelSpanL="4" labelSpanM="4"
+                                                                labelSpanS="4" adjustLabelSpan="false"
+                                                                emptySpanXL="0" emptySpanL="0"
+                                                                emptySpanM="0" emptySpanS="0">
+                                                            <f:content class="">
+                                                                <Label text="Créditos"/>
+                                                                <Text text="{path:'/AntecedentesFinancieros/ControlCreditos/E_OPEN_ITEMS',formatter: '.multiplicarMontoFormatter'}"/>
+                                                                <Label text="Compromet. Esp."/>
+                                                                <Text text="{path:'/AntecedentesFinancieros/ControlCreditos/E_OPEN_SPECIALS',formatter: '.multiplicarMontoFormatter'}"/>
+                                                                <Label text="Val. Comercial"/>
+                                                                <Text text="{path:'/AntecedentesFinancieros/ControlCreditos/E_VAL_COMERCIAL',formatter: '.multiplicarMontoFormatter'}"/>
+                                                                <Label text="Comprom. Total"/>
+                                                                <Text text="{path:'/AntecedentesFinancieros/ControlCreditos/E_SUM_OPENS',formatter: '.multiplicarMontoFormatter'}"/>
+                                                            </f:content>
+                                                        </f:SimpleForm>
+                                                    </l:Grid>
+                                                </Panel>
+                                                <Panel headerText="Datos Internos">
+                                                    <l:Grid defaultSpan="XL6 L6 M6 S12">
+                                                        <f:SimpleForm
+                                                                layout="ResponsiveGridLayout" labelSpanXL="3"
+                                                                labelSpanL="4" labelSpanM="4"
+                                                                labelSpanS="4" adjustLabelSpan="false"
+                                                                emptySpanXL="0" emptySpanL="0"
+                                                                emptySpanM="0" emptySpanS="0">
+                                                            <f:content class="">
+                                                                <Label text="Grupo Crédito Cliente"/>
+                                                                <Link text="{/AntecedentesFinancieros/ControlCreditos/E_KNKK/CTLPC}"
+                                                                    press="handleCreditoClienteDetail"/>
+                                                                <Label text="Equipo Responsable"/>
+                                                                <Link text="{/AntecedentesFinancieros/ControlCreditos/E_KNKK/SBGRP}"
+                                                                    press="handleEquipoResponsableDetail"/>
+                                                                <Label text="Grupo Clientes"/>
+                                                                <Text text="{/AntecedentesFinancieros/ControlCreditos/E_KNKK/KDGRP}"/>
+                                                            </f:content>
+                                                        </f:SimpleForm>
+                                                        <f:SimpleForm
+                                                                layout="ResponsiveGridLayout" labelSpanXL="3"
+                                                                labelSpanL="4" labelSpanM="4"
+                                                                labelSpanS="4" adjustLabelSpan="false"
+                                                                emptySpanXL="0" emptySpanL="0"
+                                                                emptySpanM="0" emptySpanS="0"
+                                                                editable="true">
+                                                            <f:content class="">
+                                                                <Label text="Bloqueado"/>
+                                                                <CheckBox editable="true"
+                                                                        selected="{=${/AntecedentesFinancieros/ControlCreditos/E_KNKK/CRBLB}==='X'}"
+                                                                        select ="handlelockChanged"
+                                                                        enabled = "true"/>
+                                                            </f:content>
+                                                        </f:SimpleForm>
+                                                    </l:Grid>
+                                                </Panel>
+                                                <Panel headerText="Datos Externos">
+                                                    <l:Grid defaultSpan="XL6 L6 M6 S12">
+                                                        <f:SimpleForm
+                                                                layout="ResponsiveGridLayout" labelSpanXL="3"
+                                                                labelSpanL="4" labelSpanM="4"
+                                                                labelSpanS="4" adjustLabelSpan="false"
+                                                                emptySpanXL="0" emptySpanL="0"
+                                                                emptySpanM="0" emptySpanS="0">
+                                                            <f:content class="">
+                                                                <Label text="Calificación Crediticia"/>
+                                                                <Text text="{/AntecedentesFinancieros/ControlCreditos/E_KNKK/DBRTG}"/>
+                                                            </f:content>
+                                                        </f:SimpleForm>
+                                                    </l:Grid>
+                                                </Panel>
+                                            </l:Grid>
+                                        </u:blocks>
+                                    </u:ObjectPageSubSection>
+                                </u:subSections>
+                            </u:ObjectPageSection>
+                        </u:sections>
+                    </u:ObjectPageLayout>
+                    <footer>
+                        <Toolbar>
+                            <Button
+                                    id="errorPopover"
+                                    icon="sap-icon://message-popup"
+                                    visible="{= ${message>/}.length > 0}"
+                                    text="{= ${message>/}.length}"
+                                    type="Emphasized"
+                                    press="handleMessagePopoverPress"/>
+                            <ToolbarSpacer/>
+                            <ToolbarSpacer/>
+                            <Button class="sapUiTinyMarginBegin" text="Guardar" icon="sap-icon://save"
+                                    press="handleGuardar" visible="{/VisibleResultado}" />
+
+                        </Toolbar>
+                    </footer>
+                </Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>
